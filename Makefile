@@ -1,6 +1,6 @@
 ROOT     := $(patsubst %/,%, $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 
-NR_CORES := 8
+NR_CORES := 20
 
 # linux image
 buildroot_defconfig = configs/buildroot_defconfig
@@ -9,7 +9,7 @@ busybox_defconfig = configs/busybox.config
 
 Image: $(buildroot_defconfig) $(linux_defconfig) $(busybox_defconfig)
 	make -C buildroot defconfig BR2_DEFCONFIG=../$(buildroot_defconfig)
-	make -C buildroot
+	make -C buildroot -j$(NR_CORES)
 	cp buildroot/output/images/Image Image
 
 fw_payload.bin: Image
